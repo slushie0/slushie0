@@ -1,7 +1,7 @@
 <h3>Hi there 👋</h3>
 <ul>
   <li> 🌄 I'm fairly fluent in Node/JS</li></li>
-  <li> 🌱 I'm learning rust with my eyes on graphics programming</li>
+  <li> 🌱 I'm learning Rust with my eyes on graphics programming</li>
   <li> 🧠 Some other fields I find interesting are AI, cryptography/cyber security, and backend</li>
   <li> 📫 Contact me on <a href="https://www.discord.com/users/542493666296594473">Discord</a></li>
   <li> 💻 You can find my website <a href="https://slushie0.github.io/slushie0/">here</a></li>
