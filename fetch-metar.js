@@ -30,17 +30,12 @@ function search() {
 }
 
 function getMetar() {
-    let airport = $("#airport").val();
-    
-    var settings = {
-        "url": "https://api.checkwx.com/metar/"+airport,
-        "method": "GET",
-        "timeout": 0,
-        "headers": { "X-API-Key": "2ca75acd9f4f4b35846b89c8cf" },
-    };
-    $.ajax(settings).done(function (res) {
-        //console.log(res);
-        if (res.results == 0) {
+    let airport = document.querySelector("#query").value;
+
+    fetch("https://api.checkwx.com/metar/"+airport+"?x-api-key=2ca75acd9f4f4b35846b89c8cf")
+        .then((response) => response.json())
+        .then((data) => {
+        /*if (res.results == 0) {
             $("#error").text("This airport has no METAR. Nearest metar is: ");
             $("#metar").text("");
             var settings2 = {
@@ -55,8 +50,8 @@ function getMetar() {
                 $("#metar").text(res2.data[0]);
             });
             return;
-        }
-        $("#error").text("");
-        $("#metar").text(res.data[0]);
+        }*/
+        document.querySelector("#error").textContent="";
+        document.querySelector("#metar").textContent=data.data[0];
     });
 }
