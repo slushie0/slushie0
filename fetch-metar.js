@@ -8,14 +8,25 @@ Papa.parse("airport-codes.csv", {
     }
 });
 
+window.addEventListener('click', function(e){
+    let div = document.querySelector("#search-results");
+    if (document.getElementById('query').contains(e.target)) {
+        div.classList.remove("visually-hidden");
+    } else {
+        div.classList.add("visually-hidden");
+    }
+});
 
 function search() {
     let query = document.querySelector("#query");
+    let searchResults = document.querySelector("#search-results");
+    searchResults.innerHTML = "";
+    if (query.value.length < 1) {
+        return;
+    }
     const regex = new RegExp(query.value, 'i');
     let newdata = data.filter((item) => Object.values(item).find((value) => regex.test(value)));
 
-    let searchResults = document.querySelector("#search-results");
-    searchResults.innerHTML = "";
     for (let i in newdata) {
         if (i > 20) { return; }
         let ident = newdata[i].ident;

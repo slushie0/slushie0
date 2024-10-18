@@ -16,11 +16,12 @@
 </head>
 <body>
     <h1>Enter Airport Identifier</h1>
-
-    <input id="query" class="dropdown-toggle" data-toggle="dropdown" type="search" aria-expanded="false" placeholder="CYVR" value="CYVR" oninput="search()" data-bs-toggle="dropdown" autocomplete="off">
-    <button id="search" onclick="getMetar()">Submit</button>
-    <div class="list-group" id="search-results">
-        <a class="list-group-item list-group-item-action" href="#">CYVR</a>
+    <div class="input-group mb-3">
+        <input id="query" type="text" class="form-control" placeholder="CYVR" aria-label="Airport Identifier" aria-describedby="query" oninput="search()" autocomplete="off">
+        <button class="btn btn-outline-secondary" type="button" id="submit-btn" >Submit</button>
+    </div>
+    <div class="list-group visually-hidden" id="search-results">
+        <!--<a class="list-group-item list-group-item-action" href="#">CYVR</a>-->
     </div>
 
     <div class="alert alert-warning" role="alert">
