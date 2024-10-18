@@ -12,24 +12,27 @@
         body {
             padding: 20px;
         }
+        #search-results {
+            position: absolute;
+            z-index: 100;
+        }
+        .alert:empty {
+            display: none;
+        }
     </style>
 </head>
 <body>
     <h1>Enter Airport Identifier</h1>
     <div class="input-group mb-3">
         <input id="query" type="text" class="form-control" placeholder="CYVR" aria-label="Airport Identifier" aria-describedby="query" oninput="search()" autocomplete="off">
-        <button class="btn btn-outline-secondary" type="button" id="submit-btn" >Submit</button>
+        <button class="btn btn-outline-secondary" type="button" id="submit-btn" onclick="getMetar()">Submit</button>
     </div>
     <div class="list-group visually-hidden" id="search-results">
         <!--<a class="list-group-item list-group-item-action" href="#">CYVR</a>-->
     </div>
 
-    <div class="alert alert-warning" role="alert">
-        <p id="error"></p>
-    </div>
-    <div class="alert alert-light" role="alert">
-        <p id="metar"></p>
-    </div>
+    <div class="alert alert-warning" id="error" role="alert"></div>
+    <div class="alert alert-light" id="metar" role="alert"></div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.js" crossorigin="anonymous"></script>
 </body>
 </html>
