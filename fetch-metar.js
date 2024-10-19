@@ -27,8 +27,8 @@ function search() {
     const regex = new RegExp(query.value, 'i');
     let newdata = data.filter((item) => Object.values(item).find((value) => regex.test(value)));
 
-    for (let i in newdata) {
-        if (i > 20) { return; }
+    for (let i = 0; i < 20; i++) {
+        if (newdata.length <= i) { return; }
         let ident = newdata[i].ident;
         let name = newdata[i].name;
         let municipality = newdata[i].municipality;
@@ -38,6 +38,7 @@ function search() {
         item.href = "#";
         item.onclick = () => {
             query.value = ident;
+            getMetar();
         }
         searchResults.appendChild(item);
     }
