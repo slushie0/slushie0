@@ -1,16 +1,19 @@
 Todo:
 short term:
--fix start UI
--add multiple metar option
--winds/dewpoint
--polish code
--fix is
--fix search suggestions
+
+- [ ] fix start UI
+- [x] add multiple metar option
+- [x] fix settings
+- [ ] make all cards same width
+- [ ] fix bg gradient
+- [ ] clouds/dewpoint
+- [ ] polish code
+- [ ] fix search suggestions
 
 long term:
--updatr to govt api AWC
--add fd's
--add route planning
+- updatr to govt api AWC
+- add fd's
+- add route planning
 
 https://airportdb.io/
 https://ourairports.com/
