@@ -1,0 +1,137 @@
+    body {
+      padding: 0;
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      font-family: system-ui, sans-serif;
+      background: linear-gradient(135deg, #f0f4ff, #e0ecff);
+    }
+
+    /* Center container for initial state */
+    .main-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      transition: transform 0.6s ease, padding 0.6s ease;
+      padding: 20px;
+    }
+
+    /* Search bar large initially */
+    .search-bar {
+      max-width: 600px;
+      width: 100%;
+      transform: scale(1.2);
+      transition: transform 0.6s ease, margin 0.6s ease;
+    }
+
+    /* After search, animate up */
+    body.search-active .main-container {
+      justify-content: flex-start;
+      align-items: center;
+      padding-top: 40px;
+    }
+
+    body.search-active .search-bar {
+      transform: scale(1);
+      margin-bottom: 20px;
+    }
+
+    /* Hidden results until active */
+    .results-container {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+      max-width: 900px;
+      width: 100%;
+    }
+
+    body.search-active .results-container {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .flex-item {
+      flex: 1 1 300px;
+      background: white;
+      border-radius: 12px;
+      padding: 15px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    }
+
+    .list-group-item {
+      border: none;
+      border-bottom: 1px solid #eee;
+    }
+
+    .list-group-item:last-child {
+      border-bottom: none;
+    }
+
+    .input-group-text {
+      background-color: #f8f9fa;
+    }
+
+.settings-btn {
+  position: relative;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+
+  /* Square hitbox */
+  width: 2.5rem;   /* adjust as needed */
+  height: 2.5rem;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.settings-btn i {
+  position: absolute;
+  transition: opacity 0.25s ease;
+}
+
+.icon-outline {
+  opacity: 1;
+}
+
+.icon-fill {
+  opacity: 0;
+}
+
+/* Hover fade */
+.settings-btn:hover .icon-outline {
+  opacity: 0;
+}
+
+.settings-btn:hover .icon-fill {
+  opacity: 1;
+}
+
+/* Click toggle fade */
+.settings-btn.active .icon-outline {
+  opacity: 0;
+}
+
+.settings-btn.active .icon-fill {
+  opacity: 1;
+}
+
+/* Spin animation */
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Apply spin when modal open (button active) */
+.settings-btn.active i {
+  animation: spin 2s linear infinite;
+}
