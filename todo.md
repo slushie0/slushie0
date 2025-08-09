@@ -2,6 +2,7 @@ Todo:
 short term:
 -fix start UI
 -add multiple metar option
+-winds/dewpoint
 -polish code
 -fix is
 -fix search suggestions
@@ -17,3 +18,5 @@ https://aviationstack.com/
 https://www.openaip.net/
 
 https://aviationweather.gov/data/api/#
+
+background: linear-gradient(135deg, #7498fc, #e0ecff);

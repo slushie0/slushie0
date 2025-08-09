@@ -1,72 +1,70 @@
 let data = {};
 Papa.parse("airport-codes.csv", {
-    download: true,
-    header: true,
-    complete: function(results) {
-        data = results.data.map(element => ({ident: element.ident, type:element.type, name: element.name, municipality: element.municipality}))
-        //console.log("Finished:", data);
-    }
+  download: true,
+  header: true,
+  complete: function (results) {
+    data = results.data.map(element => ({ ident: element.ident, type: element.type, name: element.name, municipality: element.municipality }))
+    //console.log("Finished:", data);
+  }
 });
 
-window.addEventListener('click', function(e){
-    let div = document.querySelector("#search-results");
-    if (document.getElementById('query').contains(e.target)) {
-        div.classList.remove("visually-hidden");
-    } else {
-        div.classList.add("visually-hidden");
-    }
+window.addEventListener('click', function (e) {
+  let div = document.querySelector("#search-results");
+  if (document.getElementById('query').contains(e.target)) {
+    div.classList.remove("visually-hidden");
+  } else {
+    div.classList.add("visually-hidden");
+  }
 });
 
 const sizeOrder = {
-    large_airport: 0,
-    medium_airport: 1,
-    small_airport: 2,
-    seaplane_base: 3,
-    heliport: 4,
-    closed: 5,
+  large_airport: 0,
+  medium_airport: 1,
+  small_airport: 2,
+  seaplane_base: 3,
+  heliport: 4,
+  closed: 5,
 };
 
 function search() {
-    let query = document.querySelector("#query");
-    let searchResults = document.querySelector("#search-results");
-    searchResults.innerHTML = "";
-    if (query.value.length < 1) {
-        return;
+  let query = document.querySelector("#query");
+  let searchResults = document.querySelector("#search-results");
+  searchResults.innerHTML = "";
+  if (query.value.length < 1) {
+    return;
+  }
+  const regex = new RegExp(query.value, 'i');
+  let newdata = data.filter((item) => Object.values(item).find((value) => regex.test(value)));
+  newdata.sort((a, b) => sizeOrder[a.type] - sizeOrder[b.type]);
+
+  //newdata = newdata.slice(0, 20);
+  for (let i = 0; i < 20; i++) {
+    if (newdata.length <= i) { return; }
+    console.log(newdata[i].type);
+    let ident = newdata[i].ident;
+    let name = newdata[i].name;
+    let municipality = newdata[i].municipality;
+    let item = document.createElement("a");
+    item.innerHTML = '<span>' + ident + '</span> - <span>' + name + '</span> - <span>' + municipality + '</span>';
+    item.className = "list-group-item list-group-item-action";
+    item.href = "#";
+    item.onclick = () => {
+      query.value = ident;
+      getMetar();
     }
-    const regex = new RegExp(query.value, 'i');
-    let newdata = data.filter((item) => Object.values(item).find((value) => regex.test(value)));
-    newdata.sort((a, b) => sizeOrder[a.type] - sizeOrder[b.type]);
-    
-    //newdata = newdata.slice(0, 20);
-    for (let i = 0; i < 20; i++) {
-        if (newdata.length <= i) { return; }
-        console.log(newdata[i].type);
-        let ident = newdata[i].ident;
-        let name = newdata[i].name;
-        let municipality = newdata[i].municipality;
-        let item = document.createElement("a");
-        item.innerHTML = '<span>'+ident+'</span> - <span>'+name+'</span> - <span>'+municipality+'</span>';
-        item.className = "list-group-item list-group-item-action";
-        item.href = "#";
-        item.onclick = () => {
-            query.value = ident;
-            getMetar();
-        }
-        searchResults.appendChild(item);
-    }
+    searchResults.appendChild(item);
+  }
 }
 
 let latestMetar = null;
 
 function triggerSearch() {
-  if (!document.body.classList.contains('search-active')) {
-    getMetar();
-    document.body.classList.add('search-active');
-  } else {
-    getMetar();
+  document.body.classList.add('search-active');
+  if (!document.body.classList.contains('results-active')) {
+    document.body.classList.add('results-active');
   }
+  getMetar();
 }
-
 function showError(message) {
   const errorBox = document.getElementById('error');
   if (message) {
@@ -74,8 +72,7 @@ function showError(message) {
     errorBox.classList.remove('visually-hidden');
   } else {
     errorBox.classList.add('visually-hidden');
-  }
-}
+  }}
 
 function getMetar() {
   let airport = document.querySelector("#query").value.trim();
@@ -157,7 +154,13 @@ function updateDisplayedValues() {
   let speed = latestMetar.wind[windSpeedKey];
   document.querySelector("#winds").textContent = `${degrees}° / ${speed} ${windLabel}`;
 
- 
+
+}
+
+function blurSearch() {
+  if (!document.body.classList.contains('results-active') && document.getElementById('query').value == "") {
+    document.body.classList.remove('search-active');
+  }
 }
 
 // Attach event listeners once DOM is ready
@@ -165,4 +168,28 @@ document.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll('input[type=radio]').forEach((input) => {
     input.addEventListener("change", updateDisplayedValues);
   });
+
+  let searchBox = document.getElementById('query');
+  searchBox.addEventListener("keypress", function(event) {
+  // If the user presses the "Enter" key on the keyboard
+  if (event.key === "Enter") {
+    // Cancel the default action, if needed
+    event.preventDefault();
+    // Trigger the button element with a click
+    document.getElementById("submit-btn").click();
+  }
+}); 
+
+  const settingsBtn = document.getElementById("settings-btn");
+  const settingsModal = document.getElementById("settingsModal");
+
+  // Toggle active class on modal show/hide
+  settingsModal.addEventListener('show.bs.modal', () => {
+    settingsBtn.classList.add('active');
+  });
+
+  settingsModal.addEventListener('hide.bs.modal', () => {
+    settingsBtn.classList.remove('active');
+  });
 });
+
