@@ -13,7 +13,6 @@ body {
 }
 
 body.search-active #search-header {
-  opacity: 0;
   transform: translateY(-100%);
 }
 
@@ -40,6 +39,9 @@ body.search-active #search-header {
 @media (min-width: 700px) {
   .search-bar {
     transform: scale(1.2);
+  }
+    body.search-active #search-header {
+    opacity: 0;
   }
 }
 
