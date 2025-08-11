@@ -21,10 +21,9 @@
     <div class="search-bar">
       <h1 id="search-header" class="text-center mb-4">Aviation Weather</h1>
       <div class="input-group mb-3">
-        <input id="query" type="text" class="form-control" placeholder="ICAO code or Airport name" aria-label="Airport Identifier"
-          aria-describedby="query" autocomplete="off"
-          onfocus="document.body.classList.add('search-active')"
-          onblur="blurSearch()"/><!--oninput="search()"-->
+        <input id="query" type="text" class="form-control" placeholder="ICAO code or Airport name"
+          aria-label="Airport Identifier" aria-describedby="query" autocomplete="off"
+          onfocus="document.body.classList.add('search-active')" onblur="blurSearch()" /><!--oninput="search()"-->
         <button class="btn btn-outline-primary" type="button" id="submit-btn" onclick="submit()">
           <i class="bi bi-search"></i>
         </button>
@@ -32,36 +31,13 @@
       <div class="list-group visually-hidden" id="search-results"></div>
     </div>
 
-    <!-- Results + Menu -->
+    <!-- Results -->
     <div class="results-container">
       <div class="alert alert-warning visually-hidden" id="error" role="alert"></div>
-      <!--<div class="flex-item">
-        <!-- Only show error when it exists -
-        <div class="alert alert-warning visually-hidden" id="error" role="alert"></div>
-        <div class="alert alert-light" id="raw-metar" role="alert"></div>
-        <ul class="list-group" id="metar-decoded">
-          <li class="list-group-item">
-            <span class="badge text-bg-primary rounded-pill">DATE</span>
-            <span id="time"></span>
-          </li>
-          <li class="list-group-item">
-            <span class="badge text-bg-success rounded-pill">WINDS</span>
-            <span id="winds"></span>
-          </li>
-          <li class="list-group-item">
-            <span class="badge text-bg-warning rounded-pill">TEMPERATURE</span>
-            <span id="temp"></span>
-          </li>
-          <li class="list-group-item">
-            <span class="badge text-bg-info rounded-pill">ALTIMETER</span>
-            <span id="altimeter"></span>
-          </li>
-        </ul>
-      </div>-->
-
-
+      <div class="results"></div>
     </div>
   </div>
+
   <!-- Settings -->
   <button id="settings-btn" class="settings-btn position-absolute top-0 end-0 m-3" data-bs-toggle="modal"
     data-bs-target="#settingsModal">
@@ -79,7 +55,7 @@
 
         <div class="modal-body">
           <div class="input-group mb-2">
-            <span class="input-group-text">Temp</span>
+            <span class="input-group-text">Temperature</span>
             <input type="radio" class="btn-check" name="temp" id="option-celsius" autocomplete="off" checked>
             <label class="btn btn-outline-primary" for="option-celsius">°C</label>
             <input type="radio" class="btn-check" name="temp" id="option-fahrenheit" autocomplete="off">
@@ -95,6 +71,14 @@
           </div>
 
           <div class="input-group mb-2">
+            <span class="input-group-text">Visibility</span>
+            <input type="radio" class="btn-check" name="vis" id="option-vis-sm" autocomplete="off" checked>
+            <label class="btn btn-outline-primary" for="option-vis-sm">sm</label>
+            <input type="radio" class="btn-check" name="vis" id="option-vis-m" autocomplete="off">
+            <label class="btn btn-outline-primary" for="option-vis-m">m</label>
+          </div>
+
+          <div class="input-group mb-2">
             <span class="input-group-text">Winds</span>
             <input type="radio" class="btn-check" name="winds" id="option-kts" autocomplete="off" checked>
             <label class="btn btn-outline-primary" for="option-kts">kts</label>
@@ -105,7 +89,7 @@
           </div>
 
           <div class="input-group mb-2">
-            <span class="input-group-text">altimeter</span>
+            <span class="input-group-text">Altimeter</span>
             <input type="radio" class="btn-check" name="altimeter" id="option-hg" autocomplete="off" checked>
             <label class="btn btn-outline-primary" for="option-hg">Hg</label>
             <input type="radio" class="btn-check" name="altimeter" id="option-mb" autocomplete="off">

@@ -26,6 +26,16 @@ let sizeOrder = {
   closed: 5,
 };
 
+let cloudDesc = {
+  FEW: "Few",
+  SCT: "Scattered",
+  BKN: "Broken",
+  OVC: "Overcast",
+  CLR: "Clear",
+  SKC: "Sky Clear",
+  VV: "Vertical Visibility"
+};
+
 function search() {
   let query = document.querySelector("#query");
   let searchResults = document.querySelector("#search-results");
@@ -57,6 +67,7 @@ function search() {
 }
 
 let latestMetars = [];
+let latestAirports = []
 
 function submit() {
   document.body.classList.add('search-active');
@@ -76,39 +87,39 @@ function showError(message) {
   }
 }
 
-function getMetar() {
+async function getMetar() {
   let airports = document.querySelector("#query").value
     .split(/\s+/)
-    .filter(code => /^[A-Za-z0-9]{4}$/.test(code));
+    .filter(code => /^[A-Za-z0-9]{4}$/.test(code))
+    .join();
 
-  if (airports.length == 0) {
+  if (airports === "") {
     showError("Please enter a valid airport identifier");
     return;
   }
 
-  fetch(`https://api.checkwx.com/metar/${airports.join()}/decoded?x-api-key=2ca75acd9f4f4b35846b89c8cf`)
-    .then((response) => response.json())
-    .then((data) => {
-      if (data.results === 0) {
-        showError("This airport has no METAR");
-        return;
-      }
-
-      showError("");
-      latestMetars = data.data;
-      displayMetarCards();
-    })
-    .catch((err) => {
-      console.error("Error fetching METAR data:", err);
-      showError("Failed to fetch METAR data. Please try again");
-    });
+  /*let airport_data = await fetch(`https://aviationweather.gov/api/data/airport?ids=${airports}&format=json`).catch((err) => {
+    console.error("Error fetching airport data:", err);
+    showError("Failed to fetch airport data. Please try again");
+  });*/
+  let metar_response = await fetch(`https://api.checkwx.com/metar/${airports}/decoded?x-api-key=${}`).catch((err) => {
+    console.error("Error fetching METAR data:", err);
+    showError("Failed to fetch METAR data. Please try again");
+  });
+  metar_data = await metar_response.json();
+  if (metar_data.results === 0) {
+    showError("This airport has no METAR");
+    return;
+  }
+  showError("");
+  latestMetars = metar_data.data;
+  displayMetarCards();
 }
 
-// Helper to create a card for each METAR
 function displayMetarCards() {
-  let container = document.querySelector(".results-container");//<-PROBLEM HERE
-  // Remove old cards except the flex-item (first child)
-  while (container.children.length > 1) {
+  let container = document.querySelector(".results");
+
+  while (container.children.length > 0) {
     container.removeChild(container.lastChild);
   }
 
@@ -127,16 +138,16 @@ function displayMetarCards() {
     let body = document.createElement("div");
     body.className = "card-body";
 
-    // Decoded list
-    let ul = document.createElement("ul");
-    ul.className = "list-group";
+    // Prepare all list items
+    let items = [];
+
     // Time
     let liTime = document.createElement("li");
     liTime.className = "list-group-item";
     liTime.innerHTML = `<span class="badge text-bg-primary rounded-pill">DATE</span> <span>${new Date(metar.observed + "Z").toUTCString()}</span>`;
-    ul.appendChild(liTime);
+    items.push(liTime);
 
-    // Winds
+    // Winds (with gusts)
     let windId = getSelectedRadioId("winds");
     let windUnitMap = {
       "option-kts": ["speed_kts", "kts"],
@@ -146,10 +157,12 @@ function displayMetarCards() {
     let [windSpeedKey, windLabel] = windUnitMap[windId] || windUnitMap["option-kts"];
     let windDegrees = metar.wind.degrees;
     let windSpeed = metar.wind[windSpeedKey];
+    let windGust = metar.wind[`gust_${windLabel}`];
+    let gustText = windGust ? ` (gusts ${windGust} ${windLabel})` : "";
     let liWinds = document.createElement("li");
     liWinds.className = "list-group-item";
-    liWinds.innerHTML = `<span class="badge text-bg-success rounded-pill">WINDS</span> <span>${windDegrees}° / ${windSpeed} ${windLabel}</span>`;
-    ul.appendChild(liWinds);
+    liWinds.innerHTML = `<span class="badge text-bg-success rounded-pill">WINDS</span> <span>${windDegrees}° / ${windSpeed} ${windLabel}${gustText}</span>`;
+    items.push(liWinds);
 
     // Temperature
     let tempId = getSelectedRadioId("temp");
@@ -158,14 +171,68 @@ function displayMetarCards() {
       "option-fahrenheit": ["temperature", "fahrenheit", "°F"],
     };
     let [tempObjKey, tempValKey, tempLabel] = tempUnitMap[tempId] || tempUnitMap["option-celsius"];
+    let temperature = metar.temperature ? (metar.temperature[tempValKey] + " " + tempLabel) : "N/A";
     let liTemp = document.createElement("li");
     liTemp.className = "list-group-item";
-    liTemp.innerHTML = `<span class="badge text-bg-warning rounded-pill">TEMPERATURE</span> <span>${metar[tempObjKey][tempValKey]} ${tempLabel}</span>`;
-    ul.appendChild(liTemp);
+    liTemp.innerHTML = `<span class="badge text-bg-warning rounded-pill">TEMPERATURE</span> <span>${temperature}</span>`;
+    items.push(liTemp);
+
+    // Dewpoint
+    let dewpoint = metar.dewpoint ? (metar.dewpoint[tempValKey] + " " + tempLabel) : "N/A";
+    let liDew = document.createElement("li");
+    liDew.className = "list-group-item";
+    liDew.innerHTML = `<span class="badge text-bg-danger rounded-pill">DEWPOINT</span> <span>${dewpoint}</span>`;
+    items.push(liDew);
+
+    // Visibility
+    let visId = getSelectedRadioId("vis");
+    let visUnitMap = {
+      "option-vis-sm": ["miles", "sm"],
+      "option-vis-m": ["meters", "m"],
+    };
+    let [visKey, visLabel] = visUnitMap[visId] || visUnitMap["option-vis-sm"];
+    let visValue = metar.visibility && metar.visibility[visKey] !== undefined ? metar.visibility[visKey] : "N/A";
+    let liVis = document.createElement("li");
+    liVis.className = "list-group-item";
+    liVis.innerHTML = `<span class="badge text-bg-dark rounded-pill">VISIBILITY</span> <span>${visValue} ${visValue !== "N/A" ? visLabel : ""}</span>`;
+    items.push(liVis);
+
+    // Clouds
+    let liClouds = document.createElement("li");
+    liClouds.className = "list-group-item";
+    liClouds.innerHTML = `<span class="badge text-bg-light rounded-pill">CLOUDS</span>`;
+    let cloudUnitId = getSelectedRadioId("height");
+    let cloudUnitMap = {
+      "option-ft": ["base_feet_agl", "ft"],
+      "option-m": ["base_meters_agl", "m"],
+    };
+    let [cloudBaseKey, cloudBaseLabel] = cloudUnitMap[cloudUnitId] || cloudUnitMap["option-ft"];
+    if (Array.isArray(metar.clouds) && metar.clouds.length > 0) {
+      let sortedClouds = [...metar.clouds].sort((a, b) => {
+        let aVal = a[cloudBaseKey] ?? Infinity;
+        let bVal = b[cloudBaseKey] ?? Infinity;
+        return bVal - aVal;
+      });
+      let cloudsHtml = sortedClouds.map(cloud => {
+        let desc = cloudDesc[cloud.code] || cloud.code;
+        let base = (cloud[cloudBaseKey] !== undefined && cloud[cloudBaseKey] !== null) ? `${cloud[cloudBaseKey]} ${cloudBaseLabel}` : "";
+        let type = cloud.type ? ` (${cloud.type})` : "";
+        let isCeiling = cloud.code === "BKN" || cloud.code === "OVC";
+        return `<div class="cloud-layer${isCeiling ? " cloud-ceiling" : ""}">
+          <span class="cloud-text">${desc}${base ? " " + base : ""}${type}</span>
+          <span class="cloud-underline"></span>
+        </div>`;
+      }).join("");
+      liClouds.innerHTML += `<div>${cloudsHtml}</div>`;
+    } else {
+      liClouds.innerHTML += `<span>Clear</span>`;
+    }
+    items.push(liClouds);
+
     // Altimeter
     let altimId = getSelectedRadioId("altimeter");
     let altimeterUnitMap = {
-      "option-hg": ["barometer", "hg", "inHg"],
+      "option-hg": ["barometer", "hg", "Hg"],
       "option-mb": ["barometer", "mb", "mb"],
       "option-hpa": ["barometer", "hpa", "hPa"],
     };
@@ -173,15 +240,67 @@ function displayMetarCards() {
     let liAltim = document.createElement("li");
     liAltim.className = "list-group-item";
     liAltim.innerHTML = `<span class="badge text-bg-info rounded-pill">ALTIMETER</span> <span>${metar[altimObjKey][altimValKey]} ${altimLabel}</span>`;
-    ul.appendChild(liAltim);
+    items.push(liAltim);
+
+    // Pressure Altitude
+    let densityAlt = "N/A";
+    let pressureAlt = "N/A";
+    if (metar.elevation && metar.elevation.feet && metar.barometer && metar.barometer.hg) {
+      let pa = Math.round(
+        Number(metar.elevation.feet) + (29.92 - Number(metar.barometer.hg)) * 1000
+      );
+      pressureAlt = pa + " ft";
+    }
+    if (
+      metar.elevation && metar.elevation.feet &&
+      metar.barometer && metar.barometer.hg &&
+      metar.temperature && typeof metar.temperature.celsius === "number"
+    ) {
+      let pa = Number(metar.elevation.feet) + (29.92 - Number(metar.barometer.hg)) * 1000;
+      let isa = 15 - (2 * Number(metar.elevation.feet) / 1000);
+      let da = Math.round(pa + 120 * (Number(metar.temperature.celsius) - isa));
+      densityAlt = da + " ft";
+    }
+    let liPA = document.createElement("li");
+    liPA.className = "list-group-item";
+    liPA.innerHTML = `<span class="badge text-bg-secondary rounded-pill">PRESSURE ALT</span> <span>${pressureAlt}</span>`;
+    items.push(liPA);
+
+    let liDA = document.createElement("li");
+    liDA.className = "list-group-item";
+    liDA.innerHTML = `<span class="badge text-bg-secondary rounded-pill">DENSITY ALT</span> <span>${densityAlt}</span>`;
+    items.push(liDA);
+
+    // Split into two columns
+    let col1 = document.createElement("ul");
+    col1.className = "list-group";
+    let col2 = document.createElement("ul");
+    col2.className = "list-group";
+
+    // Adjust the split as you like; here, half and half
+    let mid = Math.ceil(items.length / 2);
+    items.slice(0, mid).forEach(item => col1.appendChild(item));
+    items.slice(mid).forEach(item => col2.appendChild(item));
+
+    let row = document.createElement("div");
+    row.className = "row";
+    let colDiv1 = document.createElement("div");
+    colDiv1.className = "col-12 col-md-6";
+    let colDiv2 = document.createElement("div");
+    colDiv2.className = "col-12 col-md-6";
+    colDiv1.appendChild(col1);
+    colDiv2.appendChild(col2);
+    row.appendChild(colDiv1);
+    row.appendChild(colDiv2);
+
+    body.appendChild(row);
 
     // Raw METAR
     let raw = document.createElement("div");
-    raw.className = "alert alert-light";
+    raw.className = "alert alert-light mt-3";
     raw.textContent = metar.raw_text;
     body.appendChild(raw);
 
-    body.appendChild(ul);
     card.appendChild(body);
     container.appendChild(card);
   });
@@ -191,64 +310,6 @@ function displayMetarCards() {
 function getSelectedRadioId(name) {
   let el = document.querySelector(`input[name="${name}"]:checked`);
   return el ? el.id : null;
-}
-
-function updateDisplayedValues() {
-  if (!Array.isArray(latestMetars) || latestMetars.length === 0) return;
-
-  // For each METAR, update the corresponding card if it exists
-  // (Assumes cards are re-rendered with displayMetarCards, but this will update in-place if needed)
-  const cards = document.querySelectorAll(".results-container .card");
-  latestMetars.forEach((metar, idx) => {
-    const card = cards[idx];
-    if (!card) return;
-
-    // Update time
-    const timeElem = card.querySelector(".list-group-item:nth-child(1) span:last-child");
-    if (timeElem) {
-      timeElem.textContent = new Date(metar.observed + "Z").toUTCString();
-    }
-
-    // Update winds
-    const windId = getSelectedRadioId("winds");
-    const windUnitMap = {
-      "option-kts": ["speed_kts", "kts"],
-      "option-kph": ["speed_kph", "kph"],
-      "option-mph": ["speed_mph", "mph"],
-    };
-    const [windSpeedKey, windLabel] = windUnitMap[windId] || windUnitMap["option-kts"];
-    const windDegrees = metar.wind.degrees;
-    const windSpeed = metar.wind[windSpeedKey];
-    const windElem = card.querySelector(".list-group-item:nth-child(2) span:last-child");
-    if (windElem) {
-      windElem.textContent = `${windDegrees}° / ${windSpeed} ${windLabel}`;
-    }
-
-    // Update temperature
-    const tempId = getSelectedRadioId("temp");
-    const tempUnitMap = {
-      "option-celsius": ["temperature", "celsius", "°C"],
-      "option-fahrenheit": ["temperature", "fahrenheit", "°F"],
-    };
-    const [tempObjKey, tempValKey, tempLabel] = tempUnitMap[tempId] || tempUnitMap["option-celsius"];
-    const tempElem = card.querySelector(".list-group-item:nth-child(3) span:last-child");
-    if (tempElem) {
-      tempElem.textContent = `${metar[tempObjKey][tempValKey]} ${tempLabel}`;
-    }
-
-    // Update altimeter
-    const altimId = getSelectedRadioId("altimeter");
-    const altimeterUnitMap = {
-      "option-hg": ["barometer", "hg", "inHg"],
-      "option-mb": ["barometer", "mb", "mb"],
-      "option-hpa": ["barometer", "hpa", "hPa"],
-    };
-    const [altimObjKey, altimValKey, altimLabel] = altimeterUnitMap[altimId] || altimeterUnitMap["option-hg"];
-    const altimElem = card.querySelector(".list-group-item:nth-child(4) span:last-child");
-    if (altimElem) {
-      altimElem.textContent = `${metar[altimObjKey][altimValKey]} ${altimLabel}`;
-    }
-  });
 }
 
 function blurSearch() {
@@ -261,11 +322,7 @@ function blurSearch() {
 document.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll('input[type=radio]').forEach((input) => {
     input.addEventListener("change", () => {
-      if (latestMetars.length > 1) {
-        displayMetarCards();
-      } else {
-        updateDisplayedValues();
-      }
+      displayMetarCards();
     });
   });
 

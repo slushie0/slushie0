@@ -1,12 +1,13 @@
 Todo:
 short term:
 
+- [ ] fix 'no metar' warning (multiple/past metars)
 - [ ] fix start UI
 - [x] add multiple metar option
 - [x] fix settings
 - [ ] make all cards same width
 - [ ] fix bg gradient
-- [ ] clouds/dewpoint
+- [x] clouds/dewpoint
 - [ ] polish code
 - [ ] fix search suggestions
 
