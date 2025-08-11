@@ -2,19 +2,22 @@ Todo:
 short term:
 
 - [ ] fix 'no metar' warning (multiple/past metars)
-- [ ] fix start UI
+- [ ] make UI mobile compatible
+- [x] fix start UI
 - [x] add multiple metar option
 - [x] fix settings
 - [ ] make all cards same width
 - [ ] fix bg gradient
 - [x] clouds/dewpoint
-- [ ] polish code
 - [ ] fix search suggestions
+- [ ] backend branch for CORS
+- [ ] wind/rwy diagrams
 
 long term:
-- updatr to govt api AWC
-- add fd's
-- add route planning
+- [ ] polish code
+- [ ] add tafs
+- [ ] add fd's
+- [ ] add route planning
 
 https://airportdb.io/
 https://ourairports.com/
