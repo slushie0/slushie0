@@ -36,7 +36,7 @@ body.search-active #search-header {
   transition: transform 0.6s ease, margin 0.6s ease;
 }
 
-@media (max-width: 700px) {
+@media (min-width: 700px) {
   .search-bar {
     transform: scale(1.2);
   }
