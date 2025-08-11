@@ -10,7 +10,7 @@ short term:
 - [ ] fix bg gradient
 - [x] clouds/dewpoint
 - [ ] fix search suggestions
-- [ ] backend branch for CORS
+- [ ] delete backend branch for CORS, make seperate folder
 - [ ] wind/rwy diagrams
 
 long term:
