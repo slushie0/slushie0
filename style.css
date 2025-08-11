@@ -19,14 +19,16 @@ body.search-active #search-header {
 
 /* Main container: centered via absolute positioning */
 .main-container {
-  position: absolute;
-  top: 25%;
+  /*position: absolute;
+  top: 25%;*/
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 100%;
-  padding: 20px;
-  transition: transform 0.6s ease;
+  /*padding: 20px;*/
+  padding: 100px;
+  transition: transform 0.6s ease, margin 0
+yes ease, padding 0.6s ease;
 }
 
 /* Search bar large initially */
@@ -44,7 +46,8 @@ body.search-active #search-header {
 
 /* After search: slide up & shrink */
 body.search-active .main-container {
-  transform: translate(0, -140%); /* move up smoothly */
+  /*transform: translate(0, -140%); /* move up smoothly */
+  padding: 0px;
 }
 
 body.search-active .search-bar {
