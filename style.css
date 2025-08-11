@@ -33,8 +33,13 @@ body.search-active #search-header {
 .search-bar {
   max-width: 600px;
   width: 100%;
-  transform: scale(1.2);
   transition: transform 0.6s ease, margin 0.6s ease;
+}
+
+@media (max-width: 700px) {
+  .search-bar {
+    transform: scale(1.2);
+  }
 }
 
 /* After search: slide up & shrink */
