@@ -9,11 +9,11 @@ body {
 
 /* Hide header when active */
 #search-header {
-  transition: opacity 0.6s ease, transform 0.6s ease;
+  transition: opacity 0.6s ease, transform 0.6s ease, padding 0.6s ease;
 }
 
 body.search-active #search-header {
-  transform: translateY(-100%);
+  /*transform: translateY(-100%);*/
 }
 
 /* Main container: centered via absolute positioning */
