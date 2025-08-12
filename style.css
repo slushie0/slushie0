@@ -25,7 +25,7 @@ body.search-active #search-header {
   align-items: center;
   width: 100%;
   /*padding: 20px;*/
-  padding: 30% 20px;
+  padding: 20% 20px;
   transition: transform 0.6s ease, margin 0.6s ease, padding 0.6s ease;
 }
 
