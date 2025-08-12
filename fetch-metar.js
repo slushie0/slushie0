@@ -98,12 +98,12 @@ async function getMetar() {
     return;
   }
 
-  let airport_response = await fetch(`http://localhost:3000/airport/${airports}`).catch((err) => {
+  let airport_response = await fetch(`https://wx-backend.vercel.app/airport/${airports}`).catch((err) => {
     console.error("Error fetching airport data:", err);
     showError("Failed to fetch airport data. Please try again");
   });
   let airport_data = await airport_response.json();
-  let metar_response = await fetch(`http://localhost:3000/metar/${airports}`).catch((err) => {
+  let metar_response = await fetch(`https://wx-backend.vercel.app/metar/${airports}`).catch((err) => {
     console.error("Error fetching METAR data:", err);
     showError("Failed to fetch METAR data. Please try again");
   });
