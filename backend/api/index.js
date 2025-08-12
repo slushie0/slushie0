@@ -11,8 +11,8 @@ app.use((req, res, next) => {
   next();
 });
 
-app.get('/airport', (req, res) => {
-  let airports = req.query.airports;
+app.get('/airport/:idents', (req, res) => {
+  let airports = req.query.idents;
   request(
     { url: `https://aviationweather.gov/api/data/airport?ids=${airports}&format=json` },
     (error, response, body) => {
@@ -24,8 +24,8 @@ app.get('/airport', (req, res) => {
     }
   )
 });
-app.get('/metar', (req, res) => {
-  let airports = req.query.airports;
+app.get('/metar/:idents', (req, res) => {
+  let airports = req.query.idents;
   request(
     { url: `https://api.checkwx.com/metar/${airports}/decoded?x-api-key=${CHECKWX_API_KEY}` },
     (error, response, body) => {
