@@ -98,11 +98,12 @@ async function getMetar() {
     return;
   }
 
-  /*let airport_data = await fetch(`https://aviationweather.gov/api/data/airport?ids=${airports}&format=json`).catch((err) => {
+  let airport_data = await fetch(`https://wx-backend.vercel.app/airport?ids=${airports}`).catch((err) => {
     console.error("Error fetching airport data:", err);
     showError("Failed to fetch airport data. Please try again");
-  });*/
-  let metar_response = await fetch(`https://api.checkwx.com/metar/${airports}/decoded?x-api-key=${}`).catch((err) => {
+  });
+  console.log("Airport data fetched:", airport_data);
+  let metar_response = await fetch(`https://wx-backend.vercel.app/metar?ids=${airports}`).catch((err) => {
     console.error("Error fetching METAR data:", err);
     showError("Failed to fetch METAR data. Please try again");
   });
