@@ -1,6 +1,9 @@
 Todo:
 short term:
 
+- [ ] fix vercel CORS
+- [ ] fix mobile padding menu screen
+- [ ] fix y overflow mobile
 - [ ] fix 'no metar' warning (multiple/past metars)
 - [ ] make UI mobile compatible
 - [x] fix start UI
