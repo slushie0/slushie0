@@ -98,12 +98,12 @@ async function getMetar() {
     return;
   }
 
-  let airport_data = await fetch(`https://wx-backend.vercel.app/airport?ids=${airports}`).catch((err) => {
+  let airport_response = await fetch(`http://localhost:3000/airport/${airports}`).catch((err) => {
     console.error("Error fetching airport data:", err);
     showError("Failed to fetch airport data. Please try again");
   });
-  console.log("Airport data fetched:", airport_data);
-  let metar_response = await fetch(`https://wx-backend.vercel.app/metar?ids=${airports}`).catch((err) => {
+  let airport_data = await airport_response.json();
+  let metar_response = await fetch(`http://localhost:3000/metar/${airports}`).catch((err) => {
     console.error("Error fetching METAR data:", err);
     showError("Failed to fetch METAR data. Please try again");
   });
@@ -113,7 +113,7 @@ async function getMetar() {
     return;
   }
   showError("");
-  latestMetars = metar_data.data;
+  latestMetars = await metar_data.data;
   displayMetarCards();
 }
 
@@ -124,7 +124,8 @@ function displayMetarCards() {
     container.removeChild(container.lastChild);
   }
 
-  latestMetars.forEach((metar, idx) => {
+  latestMetars.forEach((metar) => {
+
     // Card container
     let card = document.createElement("div");
     card.className = "card mb-3";
