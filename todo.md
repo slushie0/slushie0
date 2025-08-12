@@ -1,6 +1,7 @@
 Todo:
 short term:
 
+- [ ] local storage settings
 - [ ] fix vercel CORS
 - [ ] fix mobile padding menu screen
 - [ ] fix y overflow mobile
