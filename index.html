@@ -15,27 +15,24 @@
 </head>
 
 <body>
-  <div class="main-container">
-
-    <!-- Search Box -->
-    <div class="search-bar">
-      <h1 id="search-header" class="text-center mb-4">Aviation Weather</h1>
-      <div class="input-group mb-3">
-        <input id="query" type="text" class="form-control" placeholder="ICAO code or Airport name"
-          aria-label="Airport Identifier" aria-describedby="query" autocomplete="off"
-          onfocus="document.body.classList.add('search-active')" onblur="blurSearch()" /><!--oninput="search()"-->
-        <button class="btn btn-outline-primary" type="button" id="submit-btn" onclick="submit()">
-          <i class="bi bi-search"></i>
-        </button>
-      </div>
-      <div class="list-group visually-hidden" id="search-results"></div>
+  <!-- Search Box -->
+  <div class="search-bar">
+    <h1 id="search-header" class="text-center mb-4">Aviation Weather</h1>
+    <div class="input-group mb-3">
+      <input id="query" type="text" class="form-control" placeholder="ICAO code or Airport name"
+        aria-label="Airport Identifier" aria-describedby="query" autocomplete="off"
+        onfocus="document.body.classList.add('search-active')" onblur="blurSearch()" /><!--oninput="search()"-->
+      <button class="btn btn-outline-primary" type="button" id="submit-btn" onclick="submit()">
+        <i class="bi bi-search"></i>
+      </button>
     </div>
+    <div class="list-group visually-hidden" id="search-results"></div>
+  </div>
 
-    <!-- Results -->
-    <div class="results-container">
-      <div class="alert alert-warning visually-hidden" id="error" role="alert"></div>
-      <div class="results"></div>
-    </div>
+  <!-- Results -->
+  <div id="results-container" class="visually-hidden">
+    <div class="alert alert-warning visually-hidden" id="error" role="alert"></div>
+    <div class="results"></div>
   </div>
 
   <!-- Settings -->

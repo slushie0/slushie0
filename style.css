@@ -5,27 +5,11 @@ body {
   font-family: system-ui, sans-serif;
   background: linear-gradient(135deg, #7498fc, #e0ecff);
   overflow-x: hidden;
-}
-
-/* Hide header when active */
-#search-header {
-  transition: opacity 0.6s ease, transform 0.6s ease, padding 0.6s ease;
-}
-
-body.search-active #search-header {
-  /*transform: translateY(-100%);*/
-}
-
-/* Main container: centered via absolute positioning */
-.main-container {
-  /*position: absolute;
-  top: 25%;*/
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 100%;
-  /*padding: 20px;*/
-  padding: 20px;
+  padding: 40vh 20px 0px;
   transition: transform 0.6s ease, margin 0.6s ease, padding 0.6s ease;
 }
 
@@ -33,35 +17,39 @@ body.search-active #search-header {
 .search-bar {
   max-width: 600px;
   width: 100%;
-  transition: transform 0.6s ease, margin 0.6s ease;
 }
 
-@media (min-width: 700px) {
+@media (min-width: 600px) {
   .search-bar {
+    transition: transform 0.6s ease, margin 0.6s ease;
     transform: scale(1.2);
   }
-    body.search-active #search-header {
-    opacity: 0;
+
+  #search-header {
+    transition: opacity 0.6s ease,
+      transform 0.6s ease,
+      margin 0.6s ease;
+    position: absolute;
+    width: 100%;
+    bottom: 100%;
+  }
+
+  body.search-active #search-header {
+    transform: translateY(-100%);
   }
 }
 
 /* After search: slide up & shrink */
-body.search-active .main-container {
-  /*transform: translate(0, -140%); /* move up smoothly */
+body.search-active {
   padding: 20px;
 }
 
 body.search-active .search-bar {
-  transform: scale(1);
   margin-bottom: 20px;
 }
 
 /* Hidden results until active */
-.results-container {
-  pointer-events: none;
-  /*position: absolute;
-  top: 100%;*/
-  opacity: 0;
+.results-container .visually-hidden {
   transform: translateY(20px);
   transition: opacity 0.6s ease, transform 0.6s ease;
   display: flex;
@@ -72,10 +60,8 @@ body.search-active .search-bar {
   width: 100%;
 }
 
-body.results-active .results-container {
-  opacity: 1;
+.results-container {
   transform: translateY(0);
-  pointer-events: auto;
 }
 
 .cloud-layer {
@@ -84,10 +70,12 @@ body.results-active .results-container {
   align-items: flex-start;
   margin: 8px 0;
 }
+
 .cloud-text {
   font-weight: bold;
   padding-bottom: 2px;
 }
+
 .cloud-underline {
   display: block;
   width: 100%;
@@ -97,6 +85,7 @@ body.results-active .results-container {
   margin-top: 2px;
   margin-bottom: 2px;
 }
+
 .cloud-ceiling .cloud-underline {
   background: #222;
 }
@@ -108,9 +97,9 @@ body.results-active .results-container {
   width: 220px;
   min-height: 120px;
   padding: 16px 12px 16px 16px;
-  background: rgba(255,255,255,0.85);
+  background: rgba(255, 255, 255, 0.85);
   border-radius: 0 0 0 16px;
-  box-shadow: -2px 2px 12px rgba(0,0,0,0.07);
+  box-shadow: -2px 2px 12px rgba(0, 0, 0, 0.07);
   z-index: 10;
   display: flex;
   flex-direction: column;
@@ -122,10 +111,12 @@ body.results-active .results-container {
   display: flex;
   gap: 16px;
 }
+
 .card-body .col-12 {
   flex: 1 1 0;
   min-width: 0;
 }
+
 @media (max-width: 700px) {
   .card-body .row {
     flex-direction: column;

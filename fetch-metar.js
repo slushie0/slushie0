@@ -71,9 +71,7 @@ let latestAirports = []
 
 function submit() {
   document.body.classList.add('search-active');
-  if (!document.body.classList.contains('results-active')) {
-    document.body.classList.add('results-active');
-  }
+  document.querySelector("#results-container").classList.remove('visually-hidden');
   getMetar();
 }
 
@@ -114,6 +112,7 @@ async function getMetar() {
   }
   showError("");
   latestMetars = await metar_data.data;
+  latestAirports = await airport_data;
   displayMetarCards();
 }
 
@@ -165,6 +164,16 @@ function displayMetarCards() {
     liWinds.className = "list-group-item";
     liWinds.innerHTML = `<span class="badge text-bg-success rounded-pill">WINDS</span> <span>${windDegrees}° / ${windSpeed} ${windLabel}${gustText}</span>`;
     items.push(liWinds);
+
+    <!-- Runway label at both ends -->
+    <text x="${center}" y="${runwayY1 - 4}" text-anchor="middle" font-size="10" fill="#333">${rwy2}</text>
+    <text x="${center}" y="${runwayY2 + 14}" text-anchor="middle" font-size="10" fill="#333">${rwy1}</text>
+    <!-- Wind line (no arrowhead) -->
+    <line x1="${center}" y1="${center}" x2="${windX}" y2="${windY}" stroke="#1976d2" stroke-width="3" />
+  </svg>
+`;
+
+liWinds.innerHTML += svg;*/
 
     // Temperature
     let tempId = getSelectedRadioId("temp");
@@ -315,7 +324,7 @@ function getSelectedRadioId(name) {
 }
 
 function blurSearch() {
-  if (!document.body.classList.contains('results-active') && document.getElementById('query').innerHTML == "") {
+  if (document.querySelector("#results-container").classList.contains('visually-hidden') && document.getElementById('query').value == "") {
     document.body.classList.remove('search-active');
   }
 }
@@ -351,4 +360,3 @@ document.addEventListener("DOMContentLoaded", () => {
     settingsBtn.classList.remove('active');
   });
 });
-

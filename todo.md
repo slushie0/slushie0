@@ -1,20 +1,25 @@
 Todo:
 short term:
 
-- [ ] fix vercel CORS
-- [ ] fix mobile padding menu screen
-- [ ] fix y overflow mobile
+- [ ] make all cards same width
+- [ ] fix for unusual screens (settings/input overlap)
+- [ ] smooth transition on metar load
+- [ ] loading indicator
+- [ ] SKC no line
 - [ ] fix 'no metar' warning (multiple/past metars)
-- [ ] make UI mobile compatible
+- [ ] fix search suggestions
+- [ ] wind/rwy diagrams
+- [ ] polish UI
+- [x] fix vercel CORS
+- [x] fix mobile padding menu screen
+- [x] fix y overflow mobile
+- [x] make UI mobile compatible
 - [x] fix start UI
 - [x] add multiple metar option
 - [x] fix settings
-- [ ] make all cards same width
-- [ ] fix bg gradient
+- [x] fix bg gradient
 - [x] clouds/dewpoint
-- [ ] fix search suggestions
-- [ ] delete backend branch for CORS, make seperate folder
-- [ ] wind/rwy diagrams
+- [x] delete backend branch for CORS, make seperate folder
 
 long term:
 - [ ] polish code
@@ -29,4 +34,5 @@ https://www.openaip.net/
 
 https://aviationweather.gov/data/api/#
 
-background: linear-gradient(135deg, #7498fc, #e0ecff);
+https://www.faa.gov/air_traffic/flight_info/aeronav/aero_data/NASR_Subscription/
+https://www.icao.int/api-data-service#
