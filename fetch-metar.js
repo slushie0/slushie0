@@ -123,7 +123,6 @@ function displayMetarCards() {
     container.removeChild(container.lastChild);
   }
 
-  latestMetars.forEach((metar) => {
   latestMetars.forEach((metar, idx) => {
 
     // Card container
@@ -167,6 +166,56 @@ function displayMetarCards() {
     items.push(liWinds);
 
     // --- Runway/Wind Diagram ---
+    /*let airport = latestAirports[idx];
+    console.log("Airport data:", latestAirports);
+    let rwyDirections = [];
+    airport.runways.forEach((rwy) => {
+      rwyDirections.push({
+        "rwy_mag": rwy.alignment,
+        "rwy_num": rwy.id.split('/')[0],
+        "wind_deg": windDegrees-rwy.alignment,
+      });
+      rwyDirections.push({
+        "rwy_mag": rwy.alignment+180,
+        "rwy_num": rwy.id.split('/')[1],
+        "wind_deg": windDegrees-(rwy.alignment+180),
+      });
+    });
+    console.log("Runway directions:", rwyDirections);
+    let smallestAngle = 360;
+    let bestRwy = null;
+    rwyDirections.forEach((rwy, index) => {
+      if (rwy.wind_deg < smallestAngle) {
+        smallestAngle = rwy.wind_deg;
+        bestRwy = rwy;
+      }
+    });
+
+let runwayHeading = bestRwy.rwy_mag;
+let runwayLabel = bestRwy.rwy_num;
+let rwy1 = runwayLabel.replace(/\D/g, '');
+let rwy2 = rwy1 + 18;
+let windRelative = bestRwy.wind_deg;
+
+// SVG size and center
+let svgSize = 60;
+let center = svgSize / 2;
+let runwayLength = 40;
+let windLength = 25;
+
+// Runway line (vertical)
+let runwayY1 = center - runwayLength / 2;
+let runwayY2 = center + runwayLength / 2;
+
+// Wind vector: 0° is north (up)
+let windRad = (windRelative - 0) * Math.PI / 180;
+let windX = center + windLength * Math.sin(windRad);
+let windY = center - windLength * Math.cos(windRad);
+
+let svg = `
+  <svg width="${svgSize}" height="${svgSize}" style="vertical-align:middle;margin-left:10px">
+    <!-- Runway line -->
+    <line x1="${center}" y1="${runwayY1}" x2="${center}" y2="${runwayY2}" stroke="#333" stroke-width="4" />
     <!-- Runway label at both ends -->
     <text x="${center}" y="${runwayY1 - 4}" text-anchor="middle" font-size="10" fill="#333">${rwy2}</text>
     <text x="${center}" y="${runwayY2 + 14}" text-anchor="middle" font-size="10" fill="#333">${rwy1}</text>
