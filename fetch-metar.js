@@ -124,6 +124,7 @@ function displayMetarCards() {
   }
 
   latestMetars.forEach((metar) => {
+  latestMetars.forEach((metar, idx) => {
 
     // Card container
     let card = document.createElement("div");
@@ -165,6 +166,7 @@ function displayMetarCards() {
     liWinds.innerHTML = `<span class="badge text-bg-success rounded-pill">WINDS</span> <span>${windDegrees}° / ${windSpeed} ${windLabel}${gustText}</span>`;
     items.push(liWinds);
 
+    // --- Runway/Wind Diagram ---
     <!-- Runway label at both ends -->
     <text x="${center}" y="${runwayY1 - 4}" text-anchor="middle" font-size="10" fill="#333">${rwy2}</text>
     <text x="${center}" y="${runwayY2 + 14}" text-anchor="middle" font-size="10" fill="#333">${rwy1}</text>
