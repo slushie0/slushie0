@@ -6,6 +6,7 @@ short term:
 - [ ] smooth transition on metar load
 - [ ] loading indicator
 - [ ] SKC no line
+- [ ] local storage settings
 - [ ] fix 'no metar' warning (multiple/past metars)
 - [ ] fix search suggestions
 - [ ] wind/rwy diagrams
