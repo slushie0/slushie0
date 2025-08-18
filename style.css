@@ -110,7 +110,7 @@ body.search-active .search-bar {
 }
 
 .card {
-  min-width: 70%;
+  min-width: 70vw;
 }
 
 .card-body .row {
