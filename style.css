@@ -109,6 +109,10 @@ body.search-active .search-bar {
   margin: 0;
 }
 
+.card {
+  min-width: 70%;
+}
+
 .card-body .row {
   display: flex;
   gap: 16px;
