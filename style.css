@@ -32,10 +32,12 @@ body {
     position: absolute;
     width: 100%;
     bottom: 100%;
+    opacity: 1;
   }
 
   body.search-active #search-header {
     transform: translateY(-100%);
+    opacity: 0;
   }
 }
 
